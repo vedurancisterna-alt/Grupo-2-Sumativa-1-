@@ -22,3 +22,6 @@ Thumbs.db
 
 # Datos originales del proyecto
 data/raw/*.xlsx
+
+# Notebooks de trabajo previo
+notebooks/
