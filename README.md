@@ -202,9 +202,9 @@ Los avances se registran mediante commits descriptivos asociados a las distintas
 ## Integrantes
 
 - Veronica Duran Cisterna
-- Raúl Moya
-- Daniela Rojas 
-- Manuel Sánchez
+- Raúl Moya Arriagada
+- Daniela Rojas Vilches
+- Manuel Sánchez Cárcamo
 
 ---
 
