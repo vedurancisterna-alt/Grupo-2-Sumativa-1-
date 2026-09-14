@@ -14,7 +14,7 @@ El trabajo desarrollado en esta etapa se concentra en la definición del problem
 
 Las plantas de celulosa consideradas en el proyecto cuentan con sistemas de generación eléctrica asociados a sus procesos productivos.
 
-El dataset disponible contiene registros horarios de variables relacionadas con turbogeneradores (TG), autoproducción o excedentes (AP) y otras mediciones energéticas correspondientes principalmente a las plantas Santa Fe, Pacífico y Laja, además de variables asociadas a Santa Fe Energía y Bucalemu.
+El dataset original contiene registros horarios de variables relacionadas con turbogeneradores (TG), autoproducción o excedentes (AP) y otras mediciones energéticas asociadas principalmente a las plantas Santa Fe, Pacífico y Laja. La fuente original también incorpora variables correspondientes a Santa Fe Energía y CMPC Bucalemu. Sin embargo, durante la etapa de preparación de datos se excluyen las variables de Bucalemu del conjunto analítico, debido a que dicha instalación no corresponde a una planta de celulosa y se encuentra fuera del alcance definido para el proyecto. La fuente original se conserva sin modificaciones para mantener la trazabilidad y reproducibilidad del proceso.
 
 Para realizar análisis posteriores es necesario disponer de información correctamente estructurada y validada. La exploración inicial permitió identificar, entre otros aspectos:
 
