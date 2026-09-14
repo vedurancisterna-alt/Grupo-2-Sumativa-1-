@@ -73,7 +73,6 @@ Este archivo contiene los datos preparados y validados para las etapas posterior
 
 ## Estructura del proyecto
 
-text
 Proyecto/
 │
 ├── F1/
