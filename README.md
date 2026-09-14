@@ -204,7 +204,8 @@ Los avances se registran mediante commits descriptivos asociados a las distintas
 
 - Veronica Duran Cisterna
 - Raúl Moya
-- Daniela Rojas - Manuel Sánchez
+- Daniela Rojas 
+- Manuel Sánchez
 
 ---
 
@@ -213,3 +214,33 @@ Los avances se registran mediante commits descriptivos asociados a las distintas
 Las interpretaciones operacionales de las variables energéticas deben ser validadas antes de utilizarlas para establecer relaciones causales, económicas o de desempeño operacional.
 
 Los valores negativos, positivos o iguales a cero no son clasificados automáticamente como errores, ya que pueden responder a convenciones de medición o condiciones propias del sistema energético analizado.
+
+## Mapa de vinculación entre fases del proyecto
+
+El proyecto se desarrolla de manera incremental, manteniendo trazabilidad entre la definición del problema, la preparación de los datos y las etapas posteriores de análisis.
+
+| Fase | Propósito | Implementación actual | Evidencia |
+|---|---|---|---|
+| F1 – Definición | Definir problemática, objetivos, alcance, supuestos y entorno reproducible | Implementada | F1/F1_definicion.ipynb, requirements.txt, README |
+| F2 – Preparación | Obtener, explorar, limpiar, transformar y validar los datos | Implementada | F2/F2_preparacion_datos.ipynb, data/processed/dataset_proyecto_procesado.csv |
+| F3 – Análisis | Analizar patrones, comportamiento temporal, generación y excedentes energéticos | Etapa posterior | Base preparada a partir del dataset procesado |
+| F4 – Resultados | Integrar resultados, indicadores, visualizaciones e interpretación final | Etapa posterior | Se desarrollará a partir de los resultados obtenidos en F3 |
+
+### Trazabilidad de los componentes desarrollados
+
+| Componente | F1 | F2 | Repositorio / evidencia |
+|---|:---:|:---:|---|
+| Definición de la problemática | ✓ |  | F1/F1_definicion.ipynb |
+| Objetivos y alcance | ✓ |  | F1/F1_definicion.ipynb |
+| Entorno reproducible | ✓ | ✓ | requirements.txt y notebooks |
+| Carga del dataset | ✓ | ✓ | Notebooks F1 y F2 |
+| Exploración inicial |  | ✓ | F2/F2_preparacion_datos.ipynb |
+| Transformación de tipos |  | ✓ | F2/F2_preparacion_datos.ipynb |
+| Validación temporal |  | ✓ | F2/F2_preparacion_datos.ipynb |
+| Análisis de valores cero |  | ✓ | F2/F2_preparacion_datos.ipynb |
+| Visualización exploratoria |  | ✓ | F2/F2_preparacion_datos.ipynb |
+| Casos límite y excepciones |  | ✓ | F2/F2_preparacion_datos.ipynb |
+| Pruebas automáticas |  | ✓ | assert en F2 |
+| Dataset procesado |  | ✓ | data/processed/dataset_proyecto_procesado.csv |
+| Análisis avanzado |  |  | Planificado para F3 |
+| Interpretación final |  |  | Planificada para F4 |
