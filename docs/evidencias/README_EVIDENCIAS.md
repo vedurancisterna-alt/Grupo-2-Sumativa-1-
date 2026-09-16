@@ -1,119 +1,152 @@
-# Evidencias de ejecución y trazabilidad
+# Evidencias técnicas – Sumativa 1
 
-## Sumativa 1 – Programación para la Ciencia de Datos
+Este directorio contiene las evidencias de ejecución, validación, estructura y control de versiones correspondientes a las Fases 1 y 2 del proyecto de Ciencia de Datos.
 
-Este directorio contiene las evidencias asociadas a la ejecución reproducible de los notebooks F1 y F2, la preparación y validación del conjunto de datos, las visualizaciones generadas y el control de versiones del proyecto.
-
-El proyecto utiliza como fuente los datos públicos de **Generación Real del Coordinador Eléctrico Nacional (CEN)** para el período comprendido entre enero y agosto de 2026.
-
-El alcance analítico considera las centrales:
-
-- TER CMPC LAJA
-- TER CMPC PACIFICO
-- TER CMPC SANTA FE
-
-La fuente original contiene **359.891 registros y 33 variables**. Luego de seleccionar el alcance y transformar las mediciones horarias desde formato ancho a formato largo, el conjunto de datos procesado contiene **17.496 observaciones y 13 variables**.
+Las evidencias fueron actualizadas después de incorporar las observaciones realizadas al proyecto y buscan demostrar la reproducibilidad, validación técnica, modularización y trazabilidad del trabajo desarrollado.
 
 ---
 
-## 01_F1_ejecucion_completa.png
+## 01_F1_pregunta_objetivos.png
 
-**Propósito:** evidenciar la correcta ejecución de las validaciones iniciales desarrolladas en `F1/F1_definicion.ipynb`.
+**Evidencia:** definición investigativa del proyecto.
 
-La captura muestra la ejecución satisfactoria de las validaciones mediante instrucciones `assert`, verificando que:
+Permite verificar la incorporación de la pregunta de investigación:
 
-- la fuente contiene al menos 2.000 registros;
-- la fuente contiene al menos 12 variables;
-- el subconjunto seleccionado contiene 729 registros originales;
-- el alcance considera exactamente tres centrales.
+> ¿Qué patrones temporales de generación eléctrica caracterizan a las centrales TER CMPC Laja, TER CMPC Pacífico y TER CMPC Santa Fe durante el período enero–agosto de 2026?
 
-La salida obtenida registra:
+Además, evidencia el objetivo general y los objetivos específicos que orientan el análisis.
 
-- Registros fuente: 359.891
-- Variables fuente: 33
-- Registros del alcance: 729
-- Centrales del alcance: 3
-
-La ausencia de errores durante la ejecución permite comprobar que las condiciones iniciales definidas para el proyecto se cumplen.
+**Criterios asociados:** definición del problema, pregunta de investigación, objetivos y articulación del proyecto.
 
 ---
 
-## 02_F2_validacion_final.png
+## 02_F1_ejecucion_reproducible.png
 
-**Propósito:** evidenciar la preparación, transformación y validación final del conjunto de datos analítico desarrollado en `F2/F2_preparacion_datos.ipynb`.
+**Evidencia:** ejecución técnica de F1.
 
-F2 transforma la estructura original de la fuente, que presenta 24 columnas horarias (`Hora 1` a `Hora 24`), a un formato largo con una única unidad de observación:
+Permite verificar que `F1/F1_definicion.ipynb` contiene código ejecutado para configurar/localizar el proyecto, acceder a la fuente y efectuar verificaciones iniciales.
 
-> Una observación representa la generación eléctrica registrada para una central durante una hora determinada, expresada en MWh.
+El notebook fue comprobado mediante:
 
-El dataset procesado contiene:
+`Restart Kernel → Run All`
+
+sin errores de ejecución.
+
+**Criterios asociados:** reproducibilidad, entorno técnico, notebook F1 y documentación integrada.
+
+---
+
+## 03_F2_validacion_final.png
+
+**Evidencia:** validación integral del dataset procesado.
+
+Permite verificar los principales controles realizados sobre el resultado final:
 
 - 17.496 observaciones;
 - 13 variables;
-- tres centrales;
-- período enero–agosto de 2026.
+- 0 valores nulos;
+- 0 duplicados exactos;
+- 0 identificadores duplicados;
+- 0 valores negativos de generación;
+- 3 centrales;
+- 24 observaciones por central y fecha.
 
-Las validaciones implementadas comprueban, entre otros aspectos, la estructura esperada, identificadores únicos, ausencia de duplicados, control de valores faltantes y ausencia de valores negativos de generación.
+La validación utiliza la función modularizada disponible en:
 
-Los valores iguales a **0 MWh se conservan como observaciones válidas reportadas por la fuente**, sin atribuir automáticamente una causa operacional.
+`src/validacion.py`
 
----
-
-## 03_F2_visualizaciones.png
-
-**Propósito:** evidenciar la aplicación de herramientas de análisis y visualización sobre el conjunto de datos preparado.
-
-El notebook F2 incorpora visualizaciones orientadas a explorar el comportamiento de la generación eléctrica de las centrales seleccionadas, incluyendo análisis temporal, comportamiento horario y presencia de registros con generación igual a 0 MWh.
-
-Estas visualizaciones permiten complementar las validaciones numéricas y facilitan la identificación de patrones en los datos procesados.
+**Criterios asociados:** preprocesamiento, validación técnica, modularización y calidad de datos.
 
 ---
 
-## 04_git_historial_commits.png
+## 04_F2_pruebas_tecnicas.png
 
-**Propósito:** evidenciar la trazabilidad y el uso de control de versiones mediante Git y GitHub.
+**Evidencia:** pruebas del pipeline.
 
-La captura del historial permite observar:
+Documenta la ejecución de pruebas correspondientes a:
 
-- desarrollo mediante commits;
-- utilización de ramas;
-- integración de trabajo colaborativo;
-- Pull Requests;
-- evolución de F1 y F2;
-- migración desde el conjunto de datos utilizado inicialmente hacia la fuente pública del CEN;
-- retiro de datasets privados del versionamiento;
-- actualización de la documentación del proyecto.
+- caso normal;
+- caso límite mediante introducción controlada de un duplicado artificial;
+- caso de excepción mediante intento controlado de acceso a un archivo inexistente.
 
-El historial se conserva como evidencia de la evolución del proyecto y de las decisiones implementadas durante su desarrollo.
+Estas pruebas permiten comprobar que el pipeline responde de manera esperada tanto frente a datos válidos como frente a situaciones anómalas.
+
+**Criterios asociados:** pruebas, manejo de excepciones y validación técnica.
 
 ---
 
-## 05_estructura_repositorio.png
+## 05_F2_analisis_ceros.png
 
-**Propósito:** evidenciar la organización técnica del proyecto.
+**Evidencia:** caracterización de registros con generación igual a 0 MWh.
 
-La estructura separa los principales componentes del trabajo:
+El dataset contiene 4.438 observaciones con generación igual a 0 MWh, equivalentes aproximadamente al 25,37 % del total.
 
-- `F1/`: definición y configuración inicial del proyecto.
-- `F2/`: preparación, transformación, exploración y validación de datos.
-- `data/processed/`: dataset analítico generado por F2.
-- `data/raw/`: archivos fuente disponibles localmente y excluidos del versionamiento.
-- `docs/evidencias/`: evidencias de ejecución y trazabilidad.
-- `src/`: directorio destinado a código reutilizable del proyecto.
-- `.gitignore`: reglas de exclusión de archivos que no deben versionarse.
-- `README.md`: documentación general del proyecto.
-- `requirements.txt`: dependencias necesarias para reproducir el entorno.
+La distribución presenta diferencias entre las centrales analizadas.
 
-Los datos `raw` se mantienen localmente para permitir la ejecución de los notebooks, pero se encuentran excluidos del control de versiones mediante `.gitignore`.
+Estos valores se conservan como observaciones válidas y no se atribuyen automáticamente a fallas, detenciones o mantenciones, debido a que la fuente utilizada no proporciona evidencia suficiente para establecer una causa operacional.
+
+**Criterios asociados:** exploración, análisis descriptivo, decisiones metodológicas y documentación del procesamiento.
 
 ---
 
-## Reproducibilidad y trazabilidad
+## 06_git_historial_commits.png
 
-En este proyecto se distinguen ambos conceptos:
+**Evidencia:** historial de control de versiones.
 
-**Reproducibilidad:** capacidad de volver a ejecutar el flujo utilizando el mismo código, dependencias y fuente de datos para obtener resultados consistentes.
+Permite observar commits descriptivos, integración de contribuciones, ramas y merges utilizados durante el desarrollo.
 
-**Trazabilidad:** capacidad de reconstruir la evolución del proyecto mediante commits, ramas, Pull Requests, documentación y evidencias de las decisiones adoptadas.
+Entre los cambios registrados se encuentran:
 
-Las evidencias contenidas en este directorio complementan los notebooks, el README principal y el historial del repositorio.
+- actualización de F1 y F2;
+- modularización del pipeline;
+- incorporación del diccionario de datos CEN;
+- eliminación del dataset procesado obsoleto;
+- actualización del README;
+- integración de contribuciones realizadas en paralelo.
+
+**Criterios asociados:** Git, GitHub, trazabilidad, trabajo colaborativo y control de versiones.
+
+---
+
+## 07_estructura_repositorio.png
+
+**Evidencia:** organización técnica del repositorio.
+
+Permite verificar la existencia y separación de:
+
+- `F1/`;
+- `F2/`;
+- `data/raw/`;
+- `data/processed/`;
+- `docs/`;
+- `docs/evidencias/`;
+- `src/`;
+- `README.md`;
+- `requirements.txt`;
+- `.gitignore`.
+
+También permite comprobar la modularización implementada mediante:
+
+- `src/carga.py`;
+- `src/transformacion.py`;
+- `src/validacion.py`.
+
+**Criterios asociados:** estructura del repositorio, organización del código, modularización, reproducibilidad y documentación.
+
+---
+
+## Síntesis de evidencias
+
+Las evidencias permiten relacionar los principales componentes de la Sumativa 1 con su implementación verificable:
+
+| Componente | Evidencia |
+|---|---|
+| Pregunta de investigación y objetivos | `01_F1_pregunta_objetivos.png` |
+| Ejecución reproducible F1 | `02_F1_ejecucion_reproducible.png` |
+| Validación final F2 | `03_F2_validacion_final.png` |
+| Pruebas normal, límite y excepción | `04_F2_pruebas_tecnicas.png` |
+| Caracterización de 0 MWh | `05_F2_analisis_ceros.png` |
+| Historial Git/GitHub | `06_git_historial_commits.png` |
+| Estructura y modularización | `07_estructura_repositorio.png` |
+
+Estas evidencias complementan los notebooks, el README, el código modularizado y el historial del repositorio, permitiendo verificar la ejecución y evolución del proyecto.
