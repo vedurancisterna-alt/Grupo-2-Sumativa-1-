@@ -205,9 +205,7 @@ Contiene la transformación desde el formato ancho original, con 24 columnas hor
 
 ### `src/validacion.py`
 
-Contiene la función de validación integral del dataset procesado, incluyendo dimensiones, valores faltantes, duplicados, identificadores, valores negativos, número de centrales y granularidad de 24 observaciones por central y fecha.
-
-El notebook F2 importa y utiliza estos módulos, evitando duplicar su lógica dentro del notebook y favoreciendo mantenibilidad, reutilización y separación de responsabilidades.
+Contiene las reglas de validación del dataset procesado, descompuestas en funciones atómicas e independientes (`validar_sin_nulos`, `validar_sin_duplicados`, `validar_sin_duplicados_exactos`, `validar_no_negativos`, `validar_granularidad`, `validar_categorias_esperadas`), cada una probable por separado. `validar_dataset_procesado()` compone estas reglas para mantener compatibilidad con F2, recibiendo los valores esperados (centrales, filas, columnas) como parámetros con valor por defecto en vez de escritos dentro de la lógica — permitiendo ampliar el período o el alcance del proyecto sin modificar el código.
 
 ### `src/nucleo_poo.py`
 
