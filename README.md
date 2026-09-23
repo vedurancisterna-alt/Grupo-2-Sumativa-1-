@@ -162,6 +162,9 @@ Proyecto/
 │
 ├── F2/
 │   └── F2_preparacion_datos.ipynb
+|
+├── F3/
+│   └── F3_nucleo_algoritmico.ipynb
 │
 ├── data/
 │   ├── raw/
@@ -178,6 +181,8 @@ Proyecto/
 │   ├── carga.py
 │   ├── transformacion.py
 │   └── validacion.py
+│   ├── nucleo_poo.py
+│   └── agregacion_temporal.py
 │
 ├── .gitignore
 ├── README.md
@@ -200,9 +205,15 @@ Contiene la transformación desde el formato ancho original, con 24 columnas hor
 
 ### `src/validacion.py`
 
-Contiene la función de validación integral del dataset procesado, incluyendo dimensiones, valores faltantes, duplicados, identificadores, valores negativos, número de centrales y granularidad de 24 observaciones por central y fecha.
+Contiene las reglas de validación del dataset procesado, descompuestas en funciones atómicas e independientes (`validar_sin_nulos`, `validar_sin_duplicados`, `validar_sin_duplicados_exactos`, `validar_no_negativos`, `validar_granularidad`, `validar_categorias_esperadas`), cada una probable por separado. `validar_dataset_procesado()` compone estas reglas para mantener compatibilidad con F2, recibiendo los valores esperados (centrales, filas, columnas) como parámetros con valor por defecto en vez de escritos dentro de la lógica — permitiendo ampliar el período o el alcance del proyecto sin modificar el código.
 
-El notebook F2 importa y utiliza estos módulos, evitando duplicar su lógica dentro del notebook y favoreciendo mantenibilidad, reutilización y separación de responsabilidades.
+### `src/nucleo_poo.py`
+
+Contiene la clase base `Transformador`, sus tres clases derivadas y la clase `Pipeline` que las compone. Reutiliza `carga.py`, `transformacion.py` y `validacion.py` sin reimplementar su lógica.
+
+### `src/agregacion_temporal.py`
+
+Contiene las clases del patrón Strategy para agregación temporal (`AgregacionHoraria`, `AgregacionDiaria`, `AgregacionMensual`, `AgregacionPorDiaSemana`) y `CaracterizadorTemporal`, que las aplica de forma intercambiable.
 
 ---
 
@@ -245,6 +256,21 @@ El notebook F2 importa y utiliza estos módulos, evitando duplicar su lógica de
 13. validación integral mediante `src/validacion.py`;
 14. pruebas de caso normal, límite y excepción;
 15. exportación y relectura del dataset procesado.
+
+---
+
+## Fase 3 – Núcleo algorítmico, eficiencia y programación orientada a objetos
+
+`F3/F3_nucleo_algoritmico.ipynb` reorganiza el pipeline de F2 bajo un diseño orientado a objetos, sin modificar su lógica ni sus resultados. Implementa:
+
+1. una clase base `Transformador` (método plantilla) que define el contrato `ajustar()` / `transformar()`, con control de estado y copia defensiva del DataFrame;
+2. tres clases derivadas —`FiltradorCentrales`, `TransformadorAnchoLargo`, `ConstructorVariablesDerivadas`— que heredan de `Transformador` y encapsulan, respectivamente, el filtro de centrales, la transformación ancho→largo y la construcción de variables derivadas (`Dia_Semana`, `ID_Observacion`);
+3. una clase `Pipeline` que compone y ejecuta las tres anteriores de forma polimórfica, sin consultar en ningún punto el tipo concreto de cada paso;
+4. verificación de equivalencia funcional: el resultado de `Pipeline(...).ejecutar()` se contrasta con `pd.testing.assert_frame_equal` contra el dataset procesado oficial de F2, confirmando que la reorganización en clases preserva exactamente la semántica del pipeline original;
+5. comparación de eficiencia entre dos implementaciones de la transformación ancho→largo (vectorizada con `pandas.melt`, usada en producción, e iterativa con `iterrows`, solo para contraste), midiendo tiempo con `timeit` y memoria con `tracemalloc` sobre las 729 filas reales del proyecto, con verificación previa de equivalencia entre ambas;
+6. patrón de diseño **Strategy** para la agregación temporal: cuatro clases intercambiables (`AgregacionHoraria`, `AgregacionDiaria`, `AgregacionMensual`, `AgregacionPorDiaSemana`) que implementan un contrato común, aplicadas mediante `CaracterizadorTemporal` sin que este conozca cuál estrategia recibe — lo que responde directamente a los Objetivos específicos 1 y 2 del proyecto (caracterizar y comparar los patrones temporales entre las tres centrales).
+
+Sobre recursividad: el pipeline tiene tres pasos fijos y conocidos, no un problema de profundidad variable, por lo que se optó por división funcional en clases en lugar de recursividad.
 
 ---
 
@@ -332,6 +358,16 @@ data/processed/dataset_cen_centrales_cmpc_ene_ago_2026.csv
 
 La ejecución completa debe finalizar sin errores y superar las validaciones técnicas incorporadas en el notebook y en `src/validacion.py`.
 
+### 5. Ejecutar F3
+
+Abrir:
+
+```text
+F3/F3_nucleo_algoritmico.ipynb
+```
+
+Seleccionar el mismo kernel del entorno virtual, ejecutar **Restart Kernel** y posteriormente **Run All**. El notebook depende del dataset procesado de F2 (`data/processed/dataset_cen_centrales_cmpc_ene_ago_2026.csv`) para la verificación de equivalencia, por lo que F2 debe ejecutarse primero.
+
 ---
 
 ## Trazabilidad y control de versiones
@@ -390,9 +426,9 @@ Las principales verificaciones implementadas incluyen:
 
 ## Vinculación con las fases del proyecto
 
-### Materializado en F1 y F2
+### Materializado en F1, F2 y F3
 
-En la Sumativa 1 se encuentran implementados y verificables:
+En la Sumativa 2 se encuentran implementados y verificables:
 
 - definición del problema y pregunta de investigación;
 - objetivos;
@@ -403,9 +439,12 @@ En la Sumativa 1 se encuentran implementados y verificables:
 - validación;
 - modularización;
 - dataset procesado;
-- control de versiones y trazabilidad.
+- control de versiones y trazabilidad;
+- jerarquía de clases orientada a objetos (Transformador/Pipeline);
+- comparación de eficiencia entre implementaciones;
+- patrón de diseño Strategy.
 
-### Proyectado para F3 y F4
+### Proyectado para F4
 
 Las fases posteriores profundizarán la caracterización de los patrones temporales identificados, las comparaciones entre centrales y los análisis necesarios para responder integralmente la pregunta de investigación.
 
@@ -417,6 +456,7 @@ Esta separación permite distinguir entre los componentes actualmente implementa
 
 - F1 actualizado y ejecutado mediante `Restart Kernel + Run All`.
 - F2 actualizado y ejecutado mediante `Restart Kernel + Run All`.
+- F3 implementado: jerarquía Transformador/Pipeline (POO), patrón Strategy para agregación temporal, comparación de eficiencia melt vs. iterrows, equivalencia funcional verificada contra F2.
 - Pipeline modularizado en `src/`.
 - Dataset procesado CEN validado.
 - Dataset procesado obsoleto retirado.
